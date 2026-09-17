@@ -916,6 +916,13 @@ module Lich
         end
 
         def handle_autostart
+          # Managed sessions use the pinned bundle and explicit daemon startup.
+          # Never update repositories or replay persisted jobs during login.
+          if ENV['DRBOT_MANAGED_START'] == '1'
+            @@autostarted = true
+            return
+          end
+
           if defined?(LICH_VERSION) && defined?(Lich.core_updated_with_lich_version) &&
              Gem::Version.new(LICH_VERSION) > Gem::Version.new(Lich.core_updated_with_lich_version)
             Lich::Messaging.mono(Lich::Messaging.monsterbold("New installation or updated version of Lich5 detected!"))
