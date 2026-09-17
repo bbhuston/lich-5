@@ -1247,11 +1247,15 @@ module Lich
       # @see .in_hands?
       # @see .get_item?
       def get_item_unsafe(item, container = nil)
+        item_str = item.to_s.sub('.', ' ')
         from = container
-        from = "from #{container}" if container && !(container =~ /^(in|on|under|behind|from) /i)
+        if container && !(container =~ /^(in|on|under|behind|from) /i)
+          cont_noun = container.to_s.sub(/^my /i, '').split.last
+          from = "from my #{cont_noun}"
+        end
 
-        noun = DRC.get_noun(item)
-        DRC.bput("get #{item} #{from}", GET_ITEM_FAILURE_PATTERNS, GET_ITEM_SUCCESS_PATTERNS)
+        noun = DRC.get_noun(item_str)
+        DRC.bput("get #{item_str} #{from}".strip, GET_ITEM_FAILURE_PATTERNS, GET_ITEM_SUCCESS_PATTERNS)
 
         10.times do
           break if in_hands?(noun)
@@ -1739,8 +1743,10 @@ module Lich
           return false
         end
 
-        command = "put #{item} #{preposition} #{container}" if container
-        command = "stow #{item}" unless container
+        item_str = item.to_s.sub('.', ' ')
+        cont_str = container ? "my #{container.to_s.sub(/^my /i, '').split.last}" : nil
+        command = "put #{item_str} #{preposition} #{cont_str}" if cont_str
+        command = "stow #{item_str}" unless cont_str
         result = DRC.bput(command, CONTAINER_IS_CLOSED_PATTERNS, PUT_AWAY_ITEM_SUCCESS_PATTERNS, PUT_AWAY_ITEM_FAILURE_PATTERNS, PUT_AWAY_ITEM_RETRY_PATTERNS)
         case result
         when *CONTAINER_IS_CLOSED_PATTERNS

@@ -2,8 +2,8 @@
 
 LICH_VERSION = '5.20.0' # x-release-please-version
 
-REQUIRED_RUBY = '4.0'
-RECOMMENDED_RUBY = '4.0'
+REQUIRED_RUBY = '3.2'
+RECOMMENDED_RUBY = '3.2'
 
 if Gem::Version.new(RUBY_VERSION) < Gem::Version.new(REQUIRED_RUBY)
   if (RUBY_PLATFORM =~ /mingw|win/) and (RUBY_PLATFORM !~ /darwin/i)

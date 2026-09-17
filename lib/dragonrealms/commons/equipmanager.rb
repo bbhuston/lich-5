@@ -891,9 +891,10 @@ module Lich
         elsif item.wield
           stow_helper("sheath my #{item.short_name}", item.short_name, *DRCI::SHEATH_ITEM_SUCCESS_PATTERNS, failure_patterns: DRCI::SHEATH_ITEM_FAILURE_PATTERNS)
         elsif item.container
-          stow_helper("put my #{item.short_name} in my #{item.container}", item.short_name, *DRCI::PUT_AWAY_ITEM_SUCCESS_PATTERNS, failure_patterns: DRCI::PUT_AWAY_ITEM_FAILURE_PATTERNS)
+          container_noun = item.container.split.last
+          stow_helper("put my #{item.name} in my #{container_noun}", item.name, *DRCI::PUT_AWAY_ITEM_SUCCESS_PATTERNS, failure_patterns: DRCI::PUT_AWAY_ITEM_FAILURE_PATTERNS)
         else
-          stow_helper("stow my #{item.short_name}", item.short_name, *DRCI::PUT_AWAY_ITEM_SUCCESS_PATTERNS, failure_patterns: DRCI::PUT_AWAY_ITEM_FAILURE_PATTERNS)
+          stow_helper("stow my #{item.name}", item.name, *DRCI::PUT_AWAY_ITEM_SUCCESS_PATTERNS, failure_patterns: DRCI::PUT_AWAY_ITEM_FAILURE_PATTERNS)
         end
       end
 
